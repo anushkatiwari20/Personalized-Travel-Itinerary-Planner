@@ -1,0 +1,45 @@
+# Render Blueprint — backend web service (Activity 6.1)
+# Dashboard alternative: New -> Web Service -> connect repo -> use the values below.
+services:
+  - type: web
+    name: personalized-travel-itinerary-planner
+    runtime: python
+    rootDir: backend
+    region: singapore
+    plan: free
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app.main:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "False"
+      - key: LOG_LEVEL
+        value: INFO
+      - key: AI_PROVIDER
+        value: groq
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "60"
+      - key: SECRET_KEY
+        generateValue: true
+      # Set these in the Render dashboard (Environment -> Add from .env):
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: FRONTEND_URL
+        sync: false   # e.g. https://personalized-travel-itinerary-planner.vercel.app
+      - key: BACKEND_URL
+        sync: false   # e.g. https://personalized-travel-itinerary-planner.onrender.com
